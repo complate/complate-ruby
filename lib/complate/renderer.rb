@@ -1,9 +1,8 @@
 require 'therubyracer'
 
-require 'complate-ruby/version'
+require 'complate/version'
 
-module ComplateRuby
-
+module Complate
   class Renderer
     def initialize(*context_files)
       @cxt = V8::Context.new
@@ -52,6 +51,5 @@ module ComplateRuby
         @buf = ''
       end
     end
-
   end
 end
