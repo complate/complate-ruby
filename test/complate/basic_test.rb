@@ -27,4 +27,9 @@ class Complate::BasicTest < Minitest::Test
     assert_equal 3, index
   end
 
+  def test_that_rails_streaming_assumptions_actually_hold
+    stream = @renderer.render(1, 2, 3)
+    assert_kind_of Enumerator, stream
+  end
+
 end
