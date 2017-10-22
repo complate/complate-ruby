@@ -2,7 +2,7 @@ require 'test_helper'
 
 class Complate::BasicTest < Minitest::Test
   def setup
-    @renderer = Complate::Renderer.new('test/dist/simple_bundle.js')
+    @renderer = Complate::Renderer.new('test/js/dist/simple_bundle.js')
   end
 
   def test_that_it_has_a_version_number
@@ -14,7 +14,7 @@ class Complate::BasicTest < Minitest::Test
   end
 
   def test_that_its_possible_to_load_additional_scripts
-    renderer = Complate::Renderer.new('test/dist/simple_bundle.js', 'test/dist/additional_scripts.js')
+    renderer = Complate::Renderer.new('test/js/dist/simple_bundle.js', 'test/js/dist/additional_scripts.js')
     assert_equal 'Add: 21', capture(renderer.render('add', 10, 11))
   end
 

@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "compile": "node_modules/.bin/faucet --no-fingerprint"
+  },
+  "dependencies": {
+    "complate-stream": "^0.13.1",
+    "faucet-pipeline-jsx": "^0.10.1"
+  }
+}
