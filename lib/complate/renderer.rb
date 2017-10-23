@@ -4,17 +4,19 @@ require 'complate/version'
 
 module Complate
   class Renderer
+    attr_reader :context
+
     def initialize(*context_files)
-      @cxt = V8::Context.new
-      @cxt['console'] = Console.new
+      @context = V8::Context.new
+      @context['console'] = Console.new
       context_files.each do |file|
-        @cxt.load(file)
+        @context.load(file)
       end
     end
 
     def render(*args)
       Stream.new do |stream|
-        @cxt.scope.render(stream, *args)
+        @context.scope.render(stream, *args)
       end
     end
   end
