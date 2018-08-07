@@ -2,13 +2,10 @@ import Renderer, { createElement } from "complate-stream";
 
 let renderer = new Renderer("<!DOCTYPE html>");
 
-renderer.registerView(function FrontPage(params) {
+renderer.registerView(function FrontPage({ text }) {
 	return <div class="container">
-		<span>lorem ipsum</span>
+		<span>{ text }</span>
 	</div>;
 });
 
-export default (stream, view, params, callback) => {
-	let fragment = params && params._fragment === true;
-	return renderer.renderView(view, params, stream, { fragment }, callback);
-};
+export default renderer.renderView.bind(renderer);
