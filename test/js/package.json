@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "compile": "node_modules/.bin/faucet --no-fingerprint"
+    "compile": "faucet"
   },
   "dependencies": {
-    "complate-stream": "^0.13.1",
-    "faucet-pipeline-jsx": "^0.10.1"
+    "complate-stream": "^0.16.4",
+    "faucet-pipeline-esnext": "^1.0.0-rc.10",
+    "faucet-pipeline-jsx": "^1.0.0-rc.10"
   }
 }

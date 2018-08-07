@@ -14,9 +14,9 @@ module Complate
       end
     end
 
-    def render(*args)
+    def render(view, params = {})
       Stream.new do |stream|
-        @context.scope.render(stream, *args)
+        @context.scope.render(view, params, stream, {})
       end
     end
   end

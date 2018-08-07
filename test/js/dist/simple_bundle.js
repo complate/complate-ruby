@@ -1,15 +1,12 @@
-function render(stream, a, b, c) {
-  if (a === 'add') {
-    stream.write("Add: " + add(b, c));
-  }
-  else if (a === 'streaming') {
+function render(view, params, stream, opts) {
+  if (view === 'add') {
+    stream.write("Add: " + add(params));
+  } else if (view === 'streaming') {
     for (var i = 0; i<3; i++) {
       stream.write('Block ' + i);
       stream.flush();
     }
-  }
-  else {
-    var args = Array.prototype.slice.call(arguments, 1);
-    stream.write("Arguments: " + args.join(', ') );
+  } else if (view === 'list') {
+    stream.write("Arguments: " + params.a + ", " + params.b + ", " + params.c);
   }
 }

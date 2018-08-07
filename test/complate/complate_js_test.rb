@@ -6,8 +6,7 @@ class Complate::ComplateJsTest < Minitest::Test
   end
 
   def test_simple_complate_rendering
-    s = capture(@renderer.render('FrontPage'))
-    assert_equal "<!DOCTYPE html>\n<div class=\"container\"><span>lorem ipsum</span></div>", s
+    output = capture(@renderer.render('FrontPage', text: 'lorem ipsum'))
+    assert_equal "<!DOCTYPE html>\n<div class=\"container\"><span>lorem ipsum</span></div>", output
   end
-
 end
