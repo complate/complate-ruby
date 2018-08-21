@@ -3,6 +3,8 @@ require 'test_helper'
 class Complate::BasicTest < Minitest::Test
   def setup
     @renderer = Complate::Renderer.new('test/js/dist/simple_bundle.js')
+    @logger = Minitest::Mock.new
+    @renderer.logger = @logger
   end
 
   def test_that_it_has_a_version_number
@@ -30,5 +32,11 @@ class Complate::BasicTest < Minitest::Test
   def test_that_rails_streaming_assumptions_actually_hold
     stream = @renderer.render('list', a: 1, b: 2, c: 3)
     assert_kind_of Enumerator, stream
+  end
+
+  def test_logging
+    @logger.expect :info, nil, ['hello world']
+    capture(@renderer.render('hello'))
+    @logger.verify
   end
 end
