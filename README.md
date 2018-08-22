@@ -8,19 +8,18 @@ First, add complate to your Gemfile:
 gem "complate"
 ```
 
-Add this to your `ApplicationController`:
+To render the NameOfView macro in your actions with two parameters:
 
 ```ruby
-include Complate::Rails::ActionControllerExtensions
+complate("NameOfView", param_1: "x", param_2: "y")
 ```
 
-To render something in your actions:
+This gem expect your bundle to be located in `dist/bundle.js`, but you can
+reconfigure that with:
 
 ```ruby
-complate(signature, to, be, determined)
+config.complate.bundle_path = Rails.root.join("bundle.js")
 ```
 
-This gem expect your bundle to be located in /dist/bundle.js. See 
-https://github.com/complate/complate-ruby/tree/master/test/js how a
-very simple complate/faucet setup for your project might look like.
-
+See https://github.com/complate/complate-ruby/tree/master/test/js how a very
+simple complate/faucet setup for your project might look like.
