@@ -1,4 +1,4 @@
-require 'therubyracer'
+require 'mini_racer'
 require 'complate/stream'
 require 'complate/logger_wrapper'
 
@@ -7,7 +7,7 @@ module Complate
     attr_reader :context
 
     def initialize(*context_files)
-      @context = V8::Context.new
+      @context = MiniRacer::Context.new
       context_files.each do |file|
         @context.load(file)
       end
@@ -17,12 +17,12 @@ module Complate
       Stream.new do |stream|
         # The signature is:
         # (view, params, stream, { fragment }, callback)
-        @context.scope.render(view, params, stream, {})
+        @context.call("render", view, params, stream, {})
       end
     end
 
     def logger=(logger)
-      @context['console'] = LoggerWrapper.new(logger)
+      # @context.attach('console', LoggerWrapper.new(logger))
     end
   end
 end
