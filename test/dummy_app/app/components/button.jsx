@@ -1,5 +1,5 @@
 import {createElement} from 'complate-stream';
 
-export default ({text}) => {
-	return <a class="button">{text}</a>;
+export default ({text, href}) => {
+	return <a class="button" href={href}>{text}</a>;
 }

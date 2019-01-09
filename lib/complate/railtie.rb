@@ -19,7 +19,9 @@ module Complate
 
     ActiveSupport.on_load(:action_controller) do
       define_method(:complate) do |*args|
-        renderer = Complate.renderer(Rails.configuration.complate.bundle_path, check_context_files: Rails.configuration.complate.autorefresh)
+        renderer = Complate.renderer(Rails.configuration.complate.bundle_path,
+          check_context_files: Rails.configuration.complate.autorefresh,
+          logger: Rails.logger)
         renderer.context['rails'] = self.helpers
         renderer.logger = ::Rails.logger
         self.response_body = renderer.render(*args)

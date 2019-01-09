@@ -6,18 +6,20 @@ module Complate
   class Renderer
     attr_reader :context
 
-    def initialize(context_files)
+    def initialize(context_files, options = nil)
       @context = V8::Context.new
+      self.logger = options[:logger]
+
       Array.wrap(context_files).each do |file|
         @context.load(file)
       end
     end
 
-    def render(view, params = {})
+    def render(view, params, options = {})
       Stream.new do |stream|
         # The signature is:
         # (view, params, stream, { fragment }, callback)
-        @context.scope.render(view, params, stream, {})
+        @context.scope.render(view, params, stream, options)
       end
     end
 
@@ -28,7 +30,7 @@ module Complate
   end
 
   def self.renderer(context_files, options = {})
-    return Renderer.new(context_files) if options[:no_reuse]
+    return Renderer.new(context_files, options) if options[:no_reuse]
 
     @renderer_instances||= {}
 
@@ -42,7 +44,7 @@ module Complate
     if candidate && candidate[:options] == options
       candidate[:renderer]
     else
-      renderer = Renderer.new(context_files)
+      renderer = Renderer.new(context_files, options)
       @renderer_instances[context_files] = { renderer: renderer, options: options }
       renderer
     end

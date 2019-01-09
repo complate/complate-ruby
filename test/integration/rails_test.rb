@@ -14,4 +14,9 @@ class Complate::Test < ActionDispatch::IntegrationTest
     assert_equal "Hello World!", content
   end
 
+  def test_valid_html
+    get "/fancy/jsx"
+    assert_equal 1, response_body_if_short.scan(/<!DOCTYPE/).size
+  end
+
 end

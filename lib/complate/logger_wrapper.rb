@@ -1,7 +1,7 @@
 module Complate
   class LoggerWrapper
-    def initialize(logger)
-      @logger = logger
+    def initialize(logger = nil)
+      @logger = logger || Logger.new(STDOUT)
     end
 
     def info(*msg)

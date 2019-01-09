@@ -9,7 +9,15 @@ module Complate
     def self.call(template)
       id = Complate::Compiler.generate_id_for(template.identifier, ActionController::Base.view_paths)
       compilate = registerSource(id, template.identifier)
-      "Complate::renderer(#{compilate.path.inspect}, no_reuse: #{Rails.configuration.complate.autorefresh.inspect}).render(#{id.inspect}, assigns).to_s"
+      "Complate::TemplateHandler.render(#{compilate.path.inspect}, #{id.inspect}, assigns, controller)"
+    end
+
+    def self.render(compilate_path, id, assigns, controller)
+      renderer = Complate::renderer(compilate_path,
+        no_reuse: Rails.configuration.complate.autorefresh,
+        logger: Rails.logger)
+      renderer.context['rails'] = controller.helpers
+      renderer.render(id, assigns, fragment: true).to_s
     end
 
     def self.registerSource(id, src_file_name)
