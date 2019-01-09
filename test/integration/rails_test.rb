@@ -8,4 +8,10 @@ class Complate::Test < ActionDispatch::IntegrationTest
     assert_equal "Hello World!", content
   end
 
+  def test_jsx_view_files
+    get "/fancy/jsx"
+    content = css_select('span')[0].text
+    assert_equal "Hello World!", content
+  end
+
 end

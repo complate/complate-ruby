@@ -1,12 +1,25 @@
 require 'complate/renderer'
+require 'complate/template_handler'
 
 module Complate
   class Railtie < Rails::Railtie
     config.complate = ActiveSupport::OrderedOptions.new
+    config.complate.autocompile = !Rails.env.production?
+    config.complate.autorefresh = Rails.env.development?
+
+    rake_tasks do
+      load File.expand_path('../../tasks/railtie.tasks', __FILE__)
+    end
+
+    initializer 'complate.handler.setup', :before => :add_view_paths do |app|
+      ActiveSupport.on_load(:action_view) do
+        ActionView::Template.register_template_handler(:jsx, ::Complate::TemplateHandler)
+      end
+    end
 
     ActiveSupport.on_load(:action_controller) do
       define_method(:complate) do |*args|
-        renderer = Complate.renderer(Rails.configuration.complate.bundle_path, check_context_files: Rails.env.development?)
+        renderer = Complate.renderer(Rails.configuration.complate.bundle_path, check_context_files: Rails.configuration.complate.autorefresh)
         renderer.context['rails'] = self.helpers
         renderer.logger = ::Rails.logger
         self.response_body = renderer.render(*args)

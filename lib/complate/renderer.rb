@@ -28,11 +28,13 @@ module Complate
   end
 
   def self.renderer(context_files, options = {})
+    return Renderer.new(context_files) if options[:no_reuse]
+
     @renderer_instances||= {}
 
     if (options[:check_context_files])
       options = options.dup
-      options[:context_file_shas] = Array.wrap(context_files).map {
+      options[:context_file_shas] = Array.wrap(context_files).map { |context_file|
         Digest::SHA256.file(context_file).hexdigest
       }
     end

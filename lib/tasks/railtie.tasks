@@ -1,0 +1,20 @@
+require 'fileutils'
+
+namespace :complate do
+
+  desc "Compilies all JSX views into one bundle given by `Rails.configuration.complate.bundle_path`"
+  task :compile => :environment do
+    inputs = {}
+    FileUtils.mkdir_p(File.expand_path('..', Rails.configuration.complate.bundle_path))
+
+    ActionController::Base.view_paths.each do |path|
+      Dir.glob(File.join(path, '**/*.[jt]sx')) do |view_file|
+        id = Complate::Compiler.generate_id_for(view_file, ActionController::Base.view_paths)
+        inputs[id] ||= view_file
+      end
+    end
+    outfile = File.open(Rails.configuration.complate.bundle_path, 'w')
+    Complate::Compiler.compile(inputs, outfile, Rails.root.join('tmp/complate'))
+  end
+
+end

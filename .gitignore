@@ -10,3 +10,4 @@
 test/js/node_modules
 test/dummy_app/log/*
 log/test.log
+node_modules
