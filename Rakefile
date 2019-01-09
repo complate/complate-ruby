@@ -7,9 +7,10 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/**/*_test.rb']
 end
 
-task :build_js_testdata do
-  Dir.chdir 'test/js' do
-    exec 'npm run compile'
+task :prepare_node_environment do
+  Dir.chdir 'test/dummy_app' do
+    system('npm install') || raise("npm install failed")
+    system('node_modules/.bin/faucet -c ../js/faucet.config.js') || raise("faucet compile failed!")
   end
 end
 

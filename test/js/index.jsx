@@ -1,4 +1,4 @@
-import Renderer, { createElement } from "complate-stream";
+import Renderer, { createElement } from "../dummy_app/node_modules/complate-stream";
 
 let renderer = new Renderer("<!DOCTYPE html>");
 

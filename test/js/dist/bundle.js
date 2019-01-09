@@ -120,8 +120,9 @@ function generateHTML(tag, params) {
     children[_key - 2] = arguments[_key];
   }
 
-  return function (stream, _ref, callback) {
-    var nonBlocking = _ref.nonBlocking,
+  return function (stream, options, callback) {
+    var _ref = options || {},
+        nonBlocking = _ref.nonBlocking,
         _ref$log = _ref.log,
         log = _ref$log === void 0 ? simpleLog : _ref$log,
         _ref$_idRegistry = _ref._idRegistry,
