@@ -16,7 +16,7 @@ class Complate::BasicTest < Minitest::Test
   end
 
   def test_that_its_possible_to_load_additional_scripts
-    renderer = Complate::Renderer.new('test/js/dist/simple_bundle.js', 'test/js/dist/additional_scripts.js')
+    renderer = Complate::Renderer.new(['test/js/dist/simple_bundle.js', 'test/js/dist/additional_scripts.js'])
     assert_equal 'Add: 21', capture(renderer.render('add', a: 10, b: 11))
   end
 

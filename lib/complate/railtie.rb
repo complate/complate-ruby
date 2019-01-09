@@ -6,7 +6,7 @@ module Complate
 
     ActiveSupport.on_load(:action_controller) do
       define_method(:complate) do |*args|
-        renderer = Complate::Renderer.new(Rails.configuration.complate.bundle_path)
+        renderer = Complate.renderer(Rails.configuration.complate.bundle_path, check_context_files: Rails.env.development?)
         renderer.context['rails'] = self.helpers
         renderer.logger = ::Rails.logger
         self.response_body = renderer.render(*args)
