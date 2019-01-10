@@ -7,7 +7,7 @@ module Complate
   class TemplateHandler
 
     def self.call(template)
-      id, compilate = registerSource(template.identifier)
+      id, compilate = register_source(template.identifier)
       "Complate::TemplateHandler.render(#{compilate.path.inspect}, #{id.inspect}, view_flow, assigns, controller)"
     end
 
@@ -20,7 +20,7 @@ module Complate
       renderer.render(id, assigns.merge(content: view_content), fragment: !view_flow.content[:layout].present?).to_s
     end
 
-    def self.registerSource(src_file_name)
+    def self.register_source(src_file_name)
       id = Complate::Compiler.generate_id_for(src_file_name, ActionController::Base.view_paths)
       if !Rails.configuration.complate.autocompile
         [id, File.new(Rails.configuration.complate.bundle_path)]
