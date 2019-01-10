@@ -1,5 +1,6 @@
 require 'therubyracer'
 require 'complate/stream'
+require 'complate/stream_proxy'
 require 'complate/logger_wrapper'
 require 'complate/method_proxy'
 
@@ -24,17 +25,12 @@ module Complate
 
     def render(view, params, options = {})
       Stream.new do |stream|
-        # The signature is:
-        # (view, params, stream, { fragment }, callback)
-        callback = -> () {
-          stream.close
-        }
-        if @context.scope['complate']
-          @context.scope.complate.render(view, params, stream, options, callback)
-        else
-          @context.scope.render(view, params, stream, options, callback)
-        end
+        _render(stream, view, params, options)
       end
+    end
+
+    def render_to_stream(stream, view, params, options = {})
+      _render(StreamProxy..new(stream), view, params, options)
     end
 
     def convert_safe_string(s)
@@ -51,6 +47,21 @@ module Complate
 
     def helpers=(helpers)
       @context['rails'] = helpers && MethodProxy.new(helpers, self)
+    end
+
+    private
+
+    def _render(stream, view, params, options)
+      callback = -> () {
+        stream.close
+      }
+      # The signature is:
+      # (view, params, stream, { fragment }, callback)
+      if @context.scope['complate']
+        @context.scope.complate.render(view, params, stream, options, callback)
+      else
+        @context.scope.render(view, params, stream, options, callback)
+      end
     end
 
   end
