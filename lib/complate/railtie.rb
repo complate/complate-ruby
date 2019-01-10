@@ -23,7 +23,11 @@ module Complate
           check_context_files: Rails.configuration.complate.autorefresh)
         renderer.helpers = self.helpers
         renderer.logger = ::Rails.logger
-        self.response_body = renderer.render(*args)
+        if (self.is_a?(ActionController::Live))
+          renderer.render_to_stream(response.stream, *args)
+        else
+          self.response_body = renderer.render(*args).to_s
+        end
       end
     end
 

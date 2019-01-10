@@ -27,7 +27,6 @@ module Complate
 
     def close
       self.flush
-      @block.call('') if @block
     end
 
     def to_s

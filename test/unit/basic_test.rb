@@ -23,10 +23,10 @@ class Complate::BasicTest < Minitest::Test
   def test_that_streaming_basically_works
     index = 0
     @renderer.render('streaming', {}).each do |s|
-      assert_equal "Block #{index}", s if index != 3
+      assert_equal "Block #{index}", s
       index += 1
     end
-    assert_equal 4, index
+    assert_equal 3, index
   end
 
   def test_that_rails_streaming_assumptions_actually_hold
