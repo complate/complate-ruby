@@ -23,13 +23,14 @@ module Complate
 
     def self.generate_view_file_contents(inputs)
 <<-eof
-import Renderer from 'complate-stream';
+import Renderer, {safe} from 'complate-stream';
 #{inputs.map { |id, src_file_name| "import #{id} from '#{src_file_name}';" }.join("\n")}
 
 let renderer = new Renderer('<!DOCTYPE html>');
 #{inputs.keys.map { |id| "renderer.registerView(#{id}, '#{id}');" }.join("\n")}
+let render = renderer.renderView.bind(renderer);
 
-export default renderer.renderView.bind(renderer);
+export { render, safe };
 eof
     end
 
@@ -42,7 +43,7 @@ eof
             js: [{
               source: "#{src_file.path}",
               target: "#{to_file.path}",
-              exports: "render",
+              exports: "complate",
               esnext: true,
               jsx: { pragma: "createElement" }
             }]

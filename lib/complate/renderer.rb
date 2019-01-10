@@ -19,7 +19,20 @@ module Complate
       Stream.new do |stream|
         # The signature is:
         # (view, params, stream, { fragment }, callback)
-        @context.scope.render(view, params, stream, options)
+        if @context.scope['complate']
+          @safe_string_converter = -> (s) { @context.scope.complate.safe(s) }
+          @context.scope.complate.render(view, params, stream, options)
+        else
+          @context.scope.render(view, params, stream, options)
+        end
+      end
+    end
+
+    def convert_safe_string(s)
+      if s.is_a?(String) && s.html_safe? && @safe_string_converter
+        @safe_string_converter.call(s)
+      else
+        s
       end
     end
 
@@ -28,7 +41,7 @@ module Complate
     end
 
     def helpers=(helpers)
-      @context['rails'] = helpers && MethodProxy.new(helpers)
+      @context['rails'] = helpers && MethodProxy.new(helpers, self)
     end
 
   end
