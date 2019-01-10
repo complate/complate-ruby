@@ -30,7 +30,7 @@ module Complate
     end
 
     def render_to_stream(stream, view, params, options = {})
-      _render(StreamProxy..new(stream), view, params, options)
+      _render(StreamProxy.new(stream), view, params, options)
     end
 
     def convert_safe_string(s)
