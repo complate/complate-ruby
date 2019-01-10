@@ -6,12 +6,19 @@ require 'complate/method_proxy'
 module Complate
   class Renderer
 
+    attr_reader :context
+
     def initialize(context_files, options = nil)
       @context = V8::Context.new
       self.logger = options[:logger]
 
       Array.wrap(context_files).each do |file|
         @context.load(file)
+      end
+      if @context.scope['complate']
+        @safe_string_converter = -> (s) { @context.scope.complate.safe(s) }
+      else
+        @safe_string_converter = nil
       end
     end
 
@@ -20,7 +27,6 @@ module Complate
         # The signature is:
         # (view, params, stream, { fragment }, callback)
         if @context.scope['complate']
-          @safe_string_converter = -> (s) { @context.scope.complate.safe(s) }
           @context.scope.complate.render(view, params, stream, options)
         else
           @context.scope.render(view, params, stream, options)
@@ -29,7 +35,7 @@ module Complate
     end
 
     def convert_safe_string(s)
-      if s.is_a?(String) && s.html_safe? && @safe_string_converter
+      if s.present? && s.html_safe? && @safe_string_converter.present?
         @safe_string_converter.call(s)
       else
         s

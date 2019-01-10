@@ -17,7 +17,8 @@ module Complate
         no_reuse: Rails.configuration.complate.autorefresh,
         logger: Rails.logger)
       renderer.helpers = controller.helpers
-      renderer.render(id, assigns.merge(:content => view_flow.content[:layout]), fragment: !view_flow.content[:layout].present?).to_s
+      view_content = renderer.convert_safe_string(view_flow.content[:layout].html_safe)
+      renderer.render(id, assigns.merge(content: view_content), fragment: !view_flow.content[:layout].present?).to_s
     end
 
     def self.registerSource(id, src_file_name)

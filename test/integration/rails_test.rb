@@ -10,6 +10,7 @@ class Complate::Test < ActionDispatch::IntegrationTest
 
   def test_jsx_view_files
     get "/fancy/jsx"
+    assert_match /<span>/, response_body_if_short
     content = css_select('span').text
     assert_equal "Hello World!", content
   end
@@ -23,6 +24,7 @@ class Complate::Test < ActionDispatch::IntegrationTest
 
   def test_jsx_layouts
     get "/fancy/jsx?jsx_layout=1"
+    assert_match /<span>/, response_body_if_short
     content = css_select('span')[0].text
     assert_equal "Hello World!", content
   end
