@@ -9,5 +9,7 @@ class FancyController < ApplicationController
 
   def jsx
     @text = "Hello World!"
+    render layout: "jsx_layout" if params[:jsx_layout] == "1"
   end
+
 end

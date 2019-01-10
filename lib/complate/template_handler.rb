@@ -9,15 +9,15 @@ module Complate
     def self.call(template)
       id = Complate::Compiler.generate_id_for(template.identifier, ActionController::Base.view_paths)
       compilate = registerSource(id, template.identifier)
-      "Complate::TemplateHandler.render(#{compilate.path.inspect}, #{id.inspect}, assigns, controller)"
+      "Complate::TemplateHandler.render(#{compilate.path.inspect}, #{id.inspect}, view_flow, assigns, controller)"
     end
 
-    def self.render(compilate_path, id, assigns, controller)
+    def self.render(compilate_path, id, view_flow, assigns, controller)
       renderer = Complate::renderer(compilate_path,
         no_reuse: Rails.configuration.complate.autorefresh,
         logger: Rails.logger)
-      renderer.context['rails'] = controller.helpers
-      renderer.render(id, assigns, fragment: true).to_s
+      renderer.helpers = controller.helpers
+      renderer.render(id, assigns.merge(:content => view_flow.content[:layout]), fragment: !view_flow.content[:layout].present?).to_s
     end
 
     def self.registerSource(id, src_file_name)
@@ -33,7 +33,7 @@ module Complate
 
     def self.compile(id, src_file_name)
       FileUtils.mkdir_p(Rails.root.join('tmp/complate'))
-      outfile = Tempfile.new([id, '.js'], Rails.root.join('tmp/complate'))
+      outfile = File.new(Rails.root.join('tmp/complate', "#{id}.js"), "w")
       Complate::Compiler.compile({id => src_file_name}, outfile, Rails.root.join('tmp/complate'))
       outfile
     end

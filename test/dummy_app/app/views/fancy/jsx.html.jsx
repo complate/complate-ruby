@@ -3,6 +3,6 @@ import MyButton from '../../components/button';
 
 export default ({text}) => {
   return <span>
-    <MyButton text={text} href={rails.fancy_jsx_path()}></MyButton>
+    <MyButton text={text} href={rails.fancy_jsx_path({x: 44})}></MyButton>
   </span>;
 };

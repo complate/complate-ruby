@@ -1,10 +1,10 @@
 require 'therubyracer'
 require 'complate/stream'
 require 'complate/logger_wrapper'
+require 'complate/method_proxy'
 
 module Complate
   class Renderer
-    attr_reader :context
 
     def initialize(context_files, options = nil)
       @context = V8::Context.new
@@ -25,6 +25,10 @@ module Complate
 
     def logger=(logger)
       @context['console'] = LoggerWrapper.new(logger)
+    end
+
+    def helpers=(helpers)
+      @context['rails'] = helpers && MethodProxy.new(helpers)
     end
 
   end
