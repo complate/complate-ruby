@@ -22,12 +22,12 @@ module Complate
       end
     end
 
-    def render(view, params, options = {}, &block)
+    def render(view, params, options = {})
       Stream.new do |stream|
         # The signature is:
         # (view, params, stream, { fragment }, callback)
         callback = -> () {
-          stream.flush
+          stream.close
         }
         if @context.scope['complate']
           @context.scope.complate.render(view, params, stream, options, callback)

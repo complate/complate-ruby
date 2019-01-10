@@ -1,4 +1,4 @@
-function render(view, params, stream, opts) {
+function render(view, params, stream, opts, callback) {
 	if (view === 'add') {
 		stream.write("Add: " + add(params));
 	} else if (view === 'streaming') {
@@ -11,5 +11,8 @@ function render(view, params, stream, opts) {
 		stream.write('hello');
 	} else if (view === 'list') {
 		stream.write("Arguments: " + params.a + ", " + params.b + ", " + params.c);
+	} else {
+		stream.write("View not found: " + view);
 	}
+	callback();
 }

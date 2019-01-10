@@ -3,6 +3,3 @@ require 'complate'
 
 require 'minitest/autorun'
 
-def capture(stream)
-  stream.inject(&:+)
-end

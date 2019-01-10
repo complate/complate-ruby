@@ -16,7 +16,6 @@ module Complate
     def each(&block)
       @block = block
       @after_start.call(self)
-      flush
     end
 
     def flush(*_)
@@ -26,8 +25,13 @@ module Complate
       end
     end
 
+    def close
+      self.flush
+      @block.call('') if @block
+    end
+
     def to_s
-      map(&:to_s).join()
+      self.inject(&:+)
     end
   end
 end
