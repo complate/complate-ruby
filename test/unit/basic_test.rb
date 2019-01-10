@@ -1,4 +1,4 @@
-require 'test_helper'
+require File.expand_path("../../test_helper.rb", __FILE__)
 
 class Complate::BasicTest < Minitest::Test
   def setup
@@ -22,7 +22,7 @@ class Complate::BasicTest < Minitest::Test
 
   def test_that_streaming_basically_works
     index = 0
-    @renderer.render('streaming').each do |s|
+    @renderer.render('streaming', {}).each do |s|
       assert_equal "Block #{index}", s
       index += 1
     end
@@ -36,7 +36,7 @@ class Complate::BasicTest < Minitest::Test
 
   def test_logging
     @logger.expect :info, nil, ['hello world']
-    capture(@renderer.render('hello'))
+    capture(@renderer.render('hello', {}))
     @logger.verify
   end
 end

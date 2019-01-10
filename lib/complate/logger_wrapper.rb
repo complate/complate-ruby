@@ -1,3 +1,5 @@
+require 'logger'
+
 module Complate
   class LoggerWrapper
     def initialize(logger = nil)

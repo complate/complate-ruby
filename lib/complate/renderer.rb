@@ -8,11 +8,11 @@ module Complate
 
     attr_reader :context
 
-    def initialize(context_files, options = nil)
+    def initialize(context_files, options = {})
       @context = V8::Context.new
       self.logger = options[:logger]
 
-      Array.wrap(context_files).each do |file|
+      Array(context_files).each do |file|
         @context.load(file)
       end
       if @context.scope['complate']
@@ -59,7 +59,7 @@ module Complate
 
     if (options[:check_context_files])
       options = options.dup
-      options[:context_file_shas] = Array.wrap(context_files).map { |context_file|
+      options[:context_file_shas] = Array(context_files).map { |context_file|
         Digest::SHA256.file(context_file).hexdigest
       }
     end
