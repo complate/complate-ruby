@@ -3,7 +3,7 @@ require 'fileutils'
 namespace :complate do
 
   desc "Compilies all JSX views into one bundle given by `Rails.configuration.complate.bundle_path`"
-  task :compile => :environment do
+  task :precompile => :environment do
     inputs = {}
     FileUtils.mkdir_p(File.expand_path('..', Rails.configuration.complate.bundle_path))
 

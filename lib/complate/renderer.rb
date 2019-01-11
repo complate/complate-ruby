@@ -1,8 +1,9 @@
 require 'therubyracer'
-require 'complate/stream'
-require 'complate/stream_proxy'
-require 'complate/logger_wrapper'
-require 'complate/method_proxy'
+
+require 'complate/stream/enumerator'
+require 'complate/stream/proxy'
+require 'complate/utils/logger_wrapper'
+require 'complate/utils/method_proxy'
 
 module Complate
   class Renderer
@@ -24,13 +25,13 @@ module Complate
     end
 
     def render(view, params, options = {})
-      Stream.new do |stream|
+      Stream::Enumerator.new do |stream|
         _render(stream, view, params, options)
       end
     end
 
     def render_to_stream(stream, view, params, options = {})
-      _render(StreamProxy.new(stream), view, params, options)
+      _render(Stream::Proxy.new(stream), view, params, options)
     end
 
     def convert_safe_string(s)
@@ -42,11 +43,11 @@ module Complate
     end
 
     def logger=(logger)
-      @context['console'] = LoggerWrapper.new(logger)
+      @context['console'] = Utils::LoggerWrapper.new(logger)
     end
 
     def helpers=(helpers)
-      @context['rails'] = helpers && MethodProxy.new(helpers, self)
+      @context['rails'] = helpers && Utils::MethodProxy.new(helpers, self)
     end
 
     private

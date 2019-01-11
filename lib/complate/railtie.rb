@@ -19,10 +19,15 @@ module Complate
 
     ActiveSupport.on_load(:action_controller) do
       define_method(:complate) do |*args|
-        renderer = Complate.renderer(Rails.configuration.complate.bundle_path,
-          check_context_files: Rails.configuration.complate.autorefresh)
+        options = args.extract_options!
+        bundle_path = options.delete(:bundle_path) || Rails.configuration.complate.bundle_path
+        autorefresh = options.delete(:bundle_path) || Rails.configuration.complate.autorefresh
+        args = args.push(options)
+
+        renderer = Complate.renderer(bundle_path, check_context_files: autorefresh)
         renderer.helpers = self.helpers
         renderer.logger = ::Rails.logger
+
         if (self.is_a?(ActionController::Live))
           renderer.render_to_stream(response.stream, *args)
         else
