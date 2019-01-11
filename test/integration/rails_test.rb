@@ -43,8 +43,8 @@ class Complate::Test < ActionDispatch::IntegrationTest
     assert_equal "Hello from Partial!", content
   end
 
-  def test_custom_view_registration
-    get "/fancy/custom_registration"
+  def test_chunking
+    get "/fancy/chunking"
     assert_match /<span>/, response_body_if_short
     content = css_select('span').text
     assert_equal "This mode of operation supports chunking!", content

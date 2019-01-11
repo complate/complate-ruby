@@ -34,6 +34,15 @@ module Complate
           self.response_body = renderer.render(*args).to_s
         end
       end
+
+      define_method(:complate_stream) do |action_name = nil|
+        raise "Controller #{self.class.name} must `include ActionController::Live` to allow streaming" unless self.is_a?(ActionController::Live)
+
+        action_name||= self.action_name
+        view_file = self.lookup_context.find(action_name, _prefixes, false)
+        id, compilate = Complate::TemplateHandler.register_source(view_file.identifier)
+        complate(id, self.view_assigns.merge(bundle_path: compilate.path))
+      end
     end
 
     initializer "complate.configure_bundle_path" do |app|

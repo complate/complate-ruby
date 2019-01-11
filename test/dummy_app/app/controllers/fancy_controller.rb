@@ -1,5 +1,7 @@
 class FancyController < ApplicationController
 
+  include ActionController::Live
+
   def index
     # Bundle is taken from somewhere else! It is not managed by complate-ruby
     complate("FrontPage", text: "Hello World!", bundle_path: Rails.root.join("../js/dist/bundle.js"))
@@ -13,11 +15,9 @@ class FancyController < ApplicationController
   def partials_in_erb
   end
 
-  def custom_registration
-    # This wont work in production mode if the view is placed outside rails view paths
-    # since the view won't be added to the production bundle (with `rake complate:precompile`)
-    id, compilate = Complate::TemplateHandler.register_source(Rails.root.join('app/views/fancy/simple_jsx.html.jsx'))
-    complate(id, text: "This mode of operation supports chunking!", bundle_path: compilate.path)
+  def chunking
+    @text = "This mode of operation supports chunking!"
+    complate_stream(:simple_jsx)
   end
 
 end
