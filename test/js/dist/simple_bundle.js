@@ -11,6 +11,10 @@ function render(view, params, stream, opts, callback) {
 		stream.write('hello');
 	} else if (view === 'list') {
 		stream.write("Arguments: " + params.a + ", " + params.b + ", " + params.c);
+	} else if (view === 'performance') {
+		for (var i = 0; i < params.objs.length; i++) {
+			stream.write(params.objs[i].propOrMeth);
+		}
 	} else {
 		stream.write("View not found: " + view);
 	}

@@ -39,4 +39,33 @@ class Complate::BasicTest < Minitest::Test
     @renderer.render('hello', {}).to_s
     @logger.verify
   end
+
+  def test_performance_for_properties
+    objs = []
+    1000.times do
+      objs << {propOrMeth: 'test'}
+    end
+
+    start = Time.now
+    assert_equal 1000.times.map {'test'}.join(''), @renderer.render('performance', objs: objs).to_s
+    elapsed = Time.now - start
+    assert elapsed < 1, "Expected to run code in less than 1 second. But it took #{elapsed} seconds (#{elapsed}ms per call)"
+  end
+
+  def test_performance_for_method_calls
+    objs = []
+    1000.times do
+      obj = Object.new
+      obj.define_singleton_method(:propOrMeth) do
+        "test"
+      end
+      objs << obj
+    end
+    assert_equal "test", objs.first.propOrMeth
+
+    start = Time.now
+    assert_equal 1000.times.map {'test'}.join(''), @renderer.render('performance', objs: objs).to_s
+    elapsed = Time.now - start
+    assert elapsed < 1, "Expected to run code in less than 1 second. But it took #{elapsed} seconds (#{elapsed}ms per call)"
+  end
 end
